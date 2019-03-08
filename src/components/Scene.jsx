@@ -1,32 +1,46 @@
 import React, { Component } from "react";
-import { Shape } from "./Shape";
+import x3dom from "x3domWrapper";
 
+import { positionsGenerator, colorGenerator } from "./shapeGenerator";
+
+if (x3dom.Viewarea) {
+  x3dom.Viewarea.prototype.onDoubleClick = () => {};
+}
 export class Scene extends Component {
   state = {
-    positions: Array.from(
-      { length: 100 },
-      () =>
-        `${Math.random() * 100 - 50} ${Math.random() * 100 -
-          50} ${Math.random() * 100 - 50}`
-    ),
-    colors: Array.from(
-      { length: 100 },
-      () => `${Math.random()} ${Math.random()} ${Math.random()}`
-    )
+    positions: positionsGenerator(100),
+    colors: colorGenerator(100)
   };
+
+  componentDidMount() {
+    setTimeout(() => {
+      x3dom.reload();
+      if (x3dom.current) {
+        const canvas = x3dom.current.querySelector("canvas");
+        canvas.setAttribute("tabIndex", -1);
+        canvas.setAttribute("aria-label", this.props.label);
+      }
+    });
+  }
 
   render() {
     const { positions, colors } = this.state;
     return (
-      <div className="scene-container">
-        <x3d width="800px" height="600px">
-          <scene>
+      <x3d is="x3d" className="x3d" ref={this.x3d}>
+        <scene is="x3d">
+          <viewpoint is="x3d" position="0,0,5">
             {positions.map((x, i) => (
-              <Shape key={i.toString()} translation={x} color={colors[i]} />
+              <transform key={i.toString()} is translation={x} ref="comp">
+                <shape>
+                  <appearance>
+                    <material is diffuseColor={colors[i]} />
+                  </appearance>
+                </shape>
+              </transform>
             ))}
-          </scene>
-        </x3d>
-      </div>
+          </viewpoint>
+        </scene>
+      </x3d>
     );
   }
 }
