@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import x3dom from "x3domWrapper";
+import x3dom from "x3dom";
 
 export class X3dScene extends Component {
   componentDidMount() {
