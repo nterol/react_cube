@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import x3dom from "../x3domWrapper";
+import { Sphere } from "./Sphere";
 
 import { positionsGenerator, colorGenerator } from "./shapeGenerator";
 
@@ -26,20 +27,11 @@ export function Scene({ label }) {
   // console.log(colors);
 
   return (
-    <x3d is="x3d" className="x3d-container" ref={x3d}>
+    <x3d width="1200" height="800" is="x3d" className="x3d-container" ref={x3d}>
       <scene is="x3d">
         {positions.map((x, i) => (
-          <transform is="x3d" key={i.toString()} translation={x} ref={x3d}>
-            <shape is="x3d">
-              <appearance is="x3d">
-                <material is="x3d" diffuseColor={colors[i]} />
-              </appearance>
-              <box is="x3d" />
-            </shape>
-          </transform>
+          <Sphere key={i.toString()} x={x} i={i} color={colors[i]} />
         ))}
-
-        {/* </viewpoint> */}
       </scene>
     </x3d>
   );
