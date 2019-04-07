@@ -8,6 +8,8 @@ export class X3dScene extends Component {
       if (x3dom.current) {
         const canvas = x3dom.current.querySelector("canvas");
         canvas.setAttribute("tabIndex", -1);
+        canvas.setHeight(400);
+        canvas.setWidth(400);
         canvas.setAttribute("aria-label", this.props.label);
       }
     });

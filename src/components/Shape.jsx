@@ -1,24 +1,21 @@
-import React, { Component } from "react";
+import React from "react";
 
-export class Shape extends Component {
-  componentDidMount() {
-    this.refs.comp.onClick = e => this.handleClick(e);
-  }
-
-  handleClick = e => {
-    console.log("hey salut ça va ou pas ");
-  };
-
-  render() {
-    const { translation, color } = this.props;
-    return (
-      <transform is translation={translation} ref="comp">
-        <shape>
-          <appearance>
-            <material is diffuseColor={color} />
-          </appearance>
-        </shape>
-      </transform>
-    );
-  }
+export function Shape({ translation, color, index }, ref) {
+  return (
+    <transform
+      onClick={() => {
+        console.log("coucou");
+      }}
+      is="x3d"
+      key={translation.toString()}
+      translation={translation}
+    >
+      <shape is="x3d">
+        <appearance is="x3d">
+          <material is="x3d" diffuseColor={color} />
+        </appearance>
+        <box is="x3d" />
+      </shape>
+    </transform>
+  );
 }

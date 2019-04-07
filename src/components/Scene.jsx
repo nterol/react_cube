@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import x3dom from "../x3domWrapper";
 
 import { positionsGenerator, colorGenerator } from "./shapeGenerator";
+import { Shape } from "./Shape";
 
 if (x3dom.Viewarea) {
   x3dom.Viewarea.prototype.onDoubleClick = () => {};
@@ -12,55 +13,41 @@ export function Scene({ label }) {
 
   const x3d = useRef(null);
 
+  const handleClick = e => {
+    console.log(e);
+  };
+
   useEffect(() => {
     setTimeout(() => {
       x3dom.reload();
       if (x3dom.current) {
         const canvas = x3dom.current.querySelector("canvas");
         canvas.setAttribute("tabIndex", -1);
+
         canvas.setAttribute("aria-label", label);
       }
     });
   }, []);
 
-  // console.log(colors);
-
   return (
-    <x3d is="x3d" className="x3d-container" ref={x3d}>
+    <x3d
+      is="x3d"
+      width="1000"
+      height="500px"
+      className="x3d-container"
+      ref={x3d}
+    >
       <scene is="x3d">
         {positions.map((x, i) => (
-          <transform is="x3d" key={i.toString()} translation={x} ref={x3d}>
-            <shape is="x3d">
-              <appearance is="x3d">
-                <material is="x3d" diffuseColor={colors[i]} />
-              </appearance>
-              <box is="x3d" />
-            </shape>
-          </transform>
+          <Shape
+            onClick={handleClick}
+            key={i.toString()}
+            index={i}
+            translation={x}
+            color={colors[i]}
+          />
         ))}
-
-        {/* </viewpoint> */}
       </scene>
     </x3d>
   );
 }
-
-/* const Shapes = React.forwardRef((props, ref) =>
-   props.positions.map((x, i) => (
-     <transform is="x3d" key={i.toString()} translation={x} ref={ref}>
-       <shape is="x3d">
-         <appearance is="x3d">
-           <material is="x3d" diffuseColor={props.colors[i]} />
-         </appearance>
-       </shape>
-     </transform>
-   ))
- ); */
-
-/* <viewpoint is="x3d" position="5,0,5"> */
-/* <shape is="x3d">
-          <appearance is="x3d">
-            <material is="x3d" diffuseColor="1 0 0" />
-          </appearance>
-          <box is="x3d" />
-        </shape> */
