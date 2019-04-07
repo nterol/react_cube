@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import x3dom from "../x3domWrapper";
+import { Sphere } from "./Sphere";
 
 import { positionsGenerator, colorGenerator } from "./shapeGenerator";
 import { Shape } from "./Shape";
