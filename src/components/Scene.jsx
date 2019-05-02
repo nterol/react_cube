@@ -13,7 +13,14 @@ export function Scene({ label }) {
   const [colors] = useState(colorGenerator(50));
 
   const x3d = useRef(null);
-  const handleMouseOver = () => console.log("coucou");
+
+  const handleMouseOver = e => {
+    console.log("mouse over braaa");
+  };
+
+  const handleClick = e => {
+    console.log("click click", e);
+  };
   useEffect(() => {
     setTimeout(() => {
       x3dom.reload();
@@ -28,7 +35,10 @@ export function Scene({ label }) {
       document.getElementById(`sphere-${i}`)
     );
     document.onload = () => {
-      spheres.map((s, i) => s.addEventListener("mouseover", handleMouseOver));
+      spheres.map((s, i) => {
+        s.onclick = () => handleClick(i);
+        s.addEventListener("mouseover", handleMouseOver);
+      });
     };
 
     return () =>
@@ -38,7 +48,7 @@ export function Scene({ label }) {
   }, []);
 
   return (
-    <x3d width="1200" height="800" is="x3d" className="x3d" ref={x3d}>
+    <x3d width="800" height="400" is="x3d" className="x3d" ref={x3d}>
       <scene is="x3d">
         {positions.map((x, i) => (
           <Sphere key={i.toString()} x={x} i={i} color={colors[i]} />

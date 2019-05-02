@@ -39,24 +39,24 @@
       <div id="bubble-id" class="bubble-card"></div>
     </div>
     <script>
-      function showMyBigId(id) {
-        removeElementsByClass("id-card");
-        const bubbleCard = document.getElementById("bubble-id");
-        console.log(bubbleCard);
-        const divId = document.createElement("div");
-        const divText = document.createTextNode(`id: ${id}`);
-        divId.appendChild(divText);
-        divId.setAttribute("class", "id-card");
-        console.log("spanCard", divId);
-        bubbleCard.appendChild(divId);
-      }
+      // function showMyBigId(id) {
+      //   removeElementsByClass("id-card");
+      //   const bubbleCard = document.getElementById("bubble-id");
+      //   console.log(bubbleCard);
+      //   const divId = document.createElement("div");
+      //   const divText = document.createTextNode(`id: ${id}`);
+      //   divId.appendChild(divText);
+      //   divId.setAttribute("class", "id-card");
+      //   console.log("spanCard", divId);
+      //   bubbleCard.appendChild(divId);
+      // }
 
-      function removeElementsByClass(className) {
-        const elements = document.getElementsByClassName(className);
-        while (elements.length > 0) {
-          elements[0].parentNode.removeChild(elements[0]);
-        }
-      }
+      // function removeElementsByClass(className) {
+      //   const elements = document.getElementsByClassName(className);
+      //   while (elements.length > 0) {
+      //     elements[0].parentNode.removeChild(elements[0]);
+      //   }
+      // }
     </script>
   </body>
 </html>
