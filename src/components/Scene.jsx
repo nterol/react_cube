@@ -4,6 +4,7 @@ import x3dom from "../x3domWrapper";
 import { Sphere } from "./Sphere";
 
 import { positionsGenerator, colorGenerator } from "./shapeGenerator";
+import ResizeObserver from "resize-observer-polyfill";
 
 if (x3dom.Viewarea) {
   x3dom.Viewarea.prototype.onDoubleClick = () => {};
@@ -11,6 +12,8 @@ if (x3dom.Viewarea) {
 export function Scene({ label }) {
   const [positions] = useState(positionsGenerator(50));
   const [colors] = useState(colorGenerator(50));
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
 
   const x3d = useRef(null);
 
@@ -41,6 +44,17 @@ export function Scene({ label }) {
       });
     };
 
+    const ro = new ResizeObserver((entries, observer) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        console.log("width", width, "height", height);
+        setHeight(height);
+        setWidth(width);
+      }
+    });
+
+    ro.observe(document.body);
+
     return () =>
       spheres.map((s, i) =>
         s.removeEvenetListener("mouseover", handleMouseOver)
@@ -48,7 +62,7 @@ export function Scene({ label }) {
   }, []);
 
   return (
-    <x3d width="800" height="400" is="x3d" className="x3d" ref={x3d}>
+    <x3d width={600} height={400} is="x3d" className="x3d" ref={x3d}>
       <scene is="x3d">
         {positions.map((x, i) => (
           <Sphere key={i.toString()} x={x} i={i} color={colors[i]} />
