@@ -1,15 +1,17 @@
 import React, { Component } from "react";
-import { Container } from "./components/Styles";
+import styled from "styled-components";
 import { Scene } from "./components/Scene";
-import "./components/main.scss";
 
+const BubblyContainer = styled.div`
+  border: 1px solid blue;
+`;
+
+const BubblyTitle = styled.h1`
+  font-family: Avenir;
+`;
 class App extends Component {
   render() {
-    return (
-      <Container>
-        <Scene label="test" />
-      </Container>
-    );
+    return <Scene label="test" />;
   }
 }
 

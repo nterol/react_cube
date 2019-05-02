@@ -1,6 +1,6 @@
 import React from "react";
 
-export function Shape({ translation, color, index }, ref) {
+export const Shape = ({ translation, color, index }, ref) => {
   return (
     <transform is="x3d" key={translation.toString()} translation={translation}>
       <shape is="x3d">
@@ -11,4 +11,4 @@ export function Shape({ translation, color, index }, ref) {
       </shape>
     </transform>
   );
-}
+};
