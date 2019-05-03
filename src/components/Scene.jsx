@@ -1,22 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
-import styled from "styled-components";
+
 import x3dom from "../x3domWrapper";
 
+import { Container } from "./Styles";
 import { Sphere } from "./Sphere";
-
+import { SphereController } from "./SphereController";
 import { positionsGenerator, colorGenerator } from "./shapeGenerator";
 import ResizeObserver from "resize-observer-polyfill";
-
-const Container = styled.div``;
-
-const SphereNote = styled.div`
-  z-index: 3;
-  position: absolute;
-  top: ${props => props.top}px;
-  background: black;
-  color: white;
-  font-size: 12;
-`;
 
 if (x3dom.Viewarea) {
   x3dom.Viewarea.prototype.onDoubleClick = () => {};
@@ -25,26 +15,38 @@ if (x3dom.Viewarea) {
 export function Scene({ label }) {
   const [positions] = useState(positionsGenerator(50));
   const [colors] = useState(colorGenerator(50));
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+  const [resize, setResize] = useState(1);
+  // const [width, setWidth] = useState(0);
+  // const [height, setHeight] = useState(0);
   const [selected, setSelected] = useState(false);
-  const [form, setForm] = useState({ volume: "sphere", id: 0 });
 
   const x3d = useRef(null);
 
   const handleMouseOver = e => {
     console.log("mouse over");
-    setForm({ volume: "box", id: e.target.lastChild.id });
   };
 
   const handleMouseOut = e => {
     console.log("mouse out");
-    setForm({ volume: "sphere", id: e.target.lastchild.id });
   };
 
   const handleClick = e => {
     setSelected(`${e.target.lastChild.id}`);
   };
+
+  const resizePlus = () => setResize(resize + 1);
+  const resizeMinus = () => setResize(resize - 1);
+
+  const getRadius = i => {
+    if (selected) {
+      const [, s] = selected.split("-");
+      const ii = parseInt(s, 10);
+      if (ii === i) return 1 + 0.1 * resize;
+      return 1;
+    }
+    return 1;
+  };
+
   useEffect(() => {
     setTimeout(() => {
       x3dom.reload();
@@ -66,16 +68,16 @@ export function Scene({ label }) {
       });
     };
 
-    const ro = new ResizeObserver((entries, observer) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-        console.log("width", width, "height", height);
-        setHeight(height);
-        setWidth(width);
-      }
-    });
+    // const ro = new ResizeObserver((entries, observer) => {
+    //   for (const entry of entries) {
+    //     const { width, height } = entry.contentRect;
+    //     console.log("width", width, "height", height);
+    //     setHeight(height);
+    //     setWidth(width);
+    //   }
+    // });
 
-    ro.observe(document.body);
+    // ro.observe(document.body);
 
     // return () =>
     //   spheres.map((s, i) =>
@@ -85,27 +87,36 @@ export function Scene({ label }) {
 
   return (
     <Container>
+      <SphereController
+        selected={selected}
+        resizePlus={resizePlus}
+        resizeMinus={resizeMinus}
+        resize={resize}
+      />
       <x3d
-        width={600}
-        height={400}
+        width={"1000px"}
+        height={"600px"}
         is="x3d"
         className="x3d"
         ref={x3d}
-        style={{ position: "relative" }}
+        // style={{ position: "relative" }}
       >
         <scene is="x3d">
-          {positions.map((x, i) => (
-            <Sphere
-              key={i.toString()}
-              x={x}
-              i={i}
-              color={colors[i]}
-              form={form}
-            />
-          ))}
+          {positions.map((x, i) => {
+            const radius = getRadius(i);
+            console.log(radius);
+            return (
+              <Sphere
+                key={i.toString()}
+                x={x}
+                i={i}
+                color={colors[i]}
+                radius={radius}
+              />
+            );
+          })}
         </scene>
       </x3d>
-      <SphereNote top={32}>{selected ? selected : "None"}</SphereNote>
     </Container>
   );
 }
